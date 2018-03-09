@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, Button } from 'react-native';
+import { intervals } from './TimerOne';
 
 export default class Interval extends React.Component {
   constructor(props) {
@@ -7,40 +8,74 @@ export default class Interval extends React.Component {
 
     this.state = {
       displayTime: null,
-      isClicked: false
+      isClicked: false,
+      intervals: intervals,
+      timerStarted: false
     };
   }
 
   componentDidMount() {
-
-    this.startFrame(10000)
+    this.startFrame(2000);
+    this.setState({timerStarted: true})
   }
 
   startFrame = (duration) => {
     this.duration = duration
-    requestAnimationFrame(this.frame)
+    requestAnimationFrame(this.frame);
   }
 
   frame = (currentTime) => {
-    if (!this.endTime) this.endTime = currentTime + this.duration
-    const timeRemaining = this.endTime - currentTime
-    this.setState({timeRemaining});
-    if (this.state.timeRemaining > 0) {
-      requestAnimationFrame(this.frame)
+      if (!this.endTime && !this.state.isClicked) this.endTime = currentTime + this.duration
+        const timeRemaining = this.endTime - currentTime
+        this.setState({timeRemaining});
+      if (this.state.timeRemaining > 0 && !this.state.isClicked) {
+        requestAnimationFrame(this.frame)
+      } else if (this.state.timeRemaining <= 0 && !this.state.isClicked) {
+        this.setState({timeRemaining: 0})
+      }
+
+      if(this.state.timeRemaining === 0 && !this.state.isClicked) {
+        let newTime = this.state.intervals.length ? this.state.intervals[0].duration : 0;
+        window.setTimeout(() => {
+          this.setState({timeRemaining: newTime * 1000, intervals: this.state.intervals.slice(1)});
+          this.endTime = null;
+          this.startFrame(this.state.timeRemaining);
+        }, 900);
+      }
+
+      if (isNaN(this.state.timeRemaining) && this.state.timerStarted) {
+        this.setState({timeRemaining: "DONE"})
+      }
+  }
+
+  handlePause = () => {
+    if(!this.isClicked) {
+      this.startFrame(this.timeRemaining);
     }
+    this.setState({isClicked: !this.state.isClicked});
   }
 
   render() {
     const color = this.state.isClicked ? 'darkviolet' : 'magenta';
-
+    const done = 'DONE'
     return (
       <View style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => this.setState({isClicked: !this.state.isClicked})}>
-          <View>
-            <Text style={{color, fontSize: 64}}>
-              {(this.state.timeRemaining / 1000).toFixed(2)}
-            </Text>
-          </View>
+        <View>
+          <Text style={{color, fontSize: 64}}>
+            { !this.state.intervals.length ?
+                done :
+                (this.state.timeRemaining / 1000).toFixed(2)
+            }
+          </Text>
+        </View>
+        { !this.state.isClicked && this.state.intervals.length ?
+            (<Text>{this.state.intervals[0].name}</Text>) : null
+        }
+        <TouchableWithoutFeedback>
+          <Button
+            title={this.state.isClicked ? "Start" : "Pause"}
+            onPress={this.handlePause}
+          />
         </TouchableWithoutFeedback>
       </View>
     );
