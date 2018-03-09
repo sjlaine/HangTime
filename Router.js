@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 
 import Home from './Home';
 import Interval from './Interval';
+import TimerForm from './TimerForm';
 
 export const Tabs = TabNavigator({
   Home: {
@@ -18,6 +19,13 @@ export const Tabs = TabNavigator({
     navigationOptions: {
       tabBarLabel: 'Interval',
       tabBarIcon: <Icon name="timer" size={32} color="magenta" />
+    }
+  },
+  TimerForm: {
+    screen: TimerForm,
+    navigationOptions: {
+      tabBarLabel: 'TimerForm',
+      tabBarIcon: <Icon name="book" size={32} color="magenta" />
     }
   }
 });
