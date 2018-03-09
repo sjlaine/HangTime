@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import db from './firebase';
 
+import t from 'tcomb-form-native';
+
+let Form;
+Form = t.form.Form;
+Form.stylesheet = styles;
+
+let Interval;
+Interval = t.struct({
+  name: t.String,
+  duration: t.Number
+});
+
 export default class TimerForm extends Component {
   constructor() {
     super();
@@ -22,6 +34,7 @@ export default class TimerForm extends Component {
         <Text>
           {this.state.time}
         </Text>
+        <Form type={Interval} />
       </View>
     );
   }
@@ -32,7 +45,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
+    justifyContent: 'center',
+    width: 100
+  }
 });
 
