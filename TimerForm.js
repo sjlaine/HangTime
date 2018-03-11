@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableHighlight, Button } from 'react-native';
+import { Text, ScrollView, StyleSheet, TouchableHighlight, Button } from 'react-native';
 import db from './firebase';
 import _ from 'lodash';
 
@@ -38,8 +38,7 @@ export default class TimerForm extends Component {
   constructor() {
     super();
     this.state = {
-      intSet: [],
-      currentTimer: []
+      intSet: []
     };
   }
 
@@ -65,14 +64,33 @@ export default class TimerForm extends Component {
   }
 
   addRepeats = () => {
-    this.setState({repeatInt: this.state.repeats.repeats})
-    console.log(this.state.repeatInt);
+    let newRepeats = this.state.repeats.repeats;
+    this.setState({repeatInt: newRepeats})
+  }
+
+  addToTimer = () => {
+    let repeats = +this.state.repeatInt;
+    let timerChunk = [];
+    while (repeats > 0) {
+      timerChunk.push(...this.state.intSet);
+      repeats--;
+    }
+    this.state.currentTimer ?
+    this.setState({currentTimer: [...this.state.currentTimer, ...timerChunk]}) :
+    this.setState({currentTimer: [...timerChunk]});
+    console.log(this.state);
+    this.setState({
+      intSet: [],
+      repeats: null,
+      repeatInt: null,
+      interval: null
+    })
   }
 
   render() {
     console.log(this.state.repeats)
     return (
-      <View style={{marginTop: 50}}>
+      <ScrollView style={{marginTop: 50}}>
         <Form type={Interval} options={options} onChange={this.handleChangeInterval} value={this.state.interval} />
         <TouchableHighlight style={styles.button} onPress={this.addInterval} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Add Interval</Text>
@@ -89,7 +107,17 @@ export default class TimerForm extends Component {
         <TouchableHighlight style={styles.button2} onPress={this.addRepeats} underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Repeat Interval</Text>
         </TouchableHighlight>
-      </View>
+        <TouchableHighlight style={styles.button} onPress={this.addToTimer} underlayColor='#99d9f4'>
+          <Text style={styles.buttonText}>Add To Timer</Text>
+        </TouchableHighlight>
+        <Text>Current Timer: </Text>
+        <Text>
+        {
+          !!this.state.currentTimer &&
+          this.state.currentTimer.map(interval => interval.name + ': ' + interval.duration + 's \n')
+        }
+        </Text>
+      </ScrollView>
     );
   }
 }
