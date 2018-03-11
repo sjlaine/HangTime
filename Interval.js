@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, Button } from 'react-native';
 import { intervals } from './TimerOne';
+import db from './firebase';
 
 export default class Interval extends React.Component {
   constructor(props) {
@@ -9,12 +10,16 @@ export default class Interval extends React.Component {
     this.state = {
       displayTime: null,
       isClicked: false,
-      intervals: intervals,
       timerStarted: false
     };
   }
 
   componentDidMount() {
+    let myTimer;
+    return db.ref('timer/').once('value').then(function(snapshot) {
+      return snapshot.val();
+    })
+    .then(value => this.setState({intervals: value}))
   }
 
   handleStart = () => {
@@ -81,7 +86,7 @@ export default class Interval extends React.Component {
             }
           </Text>
         </View>
-        { !this.state.isClicked && this.state.intervals.length ?
+        { !this.state.isClicked && this.state.intervals ?
             (<Text>{this.state.intervals[0].name}</Text>) : null
         }
         <TouchableWithoutFeedback>
