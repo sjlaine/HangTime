@@ -15,8 +15,11 @@ export default class Interval extends React.Component {
   }
 
   componentDidMount() {
+  }
+
+  handleStart = () => {
     this.startFrame(2000);
-    this.setState({timerStarted: true})
+    this.setState({begin: true})
   }
 
   startFrame = (duration) => {
@@ -25,8 +28,8 @@ export default class Interval extends React.Component {
   }
 
   frame = (currentTime) => {
-      if (!this.endTime && !this.state.isClicked) this.endTime = currentTime + this.duration
-        const timeRemaining = this.endTime - currentTime
+      if (!this.endTime && !this.state.isClicked) this.endTime = currentTime + this.duration;
+        const timeRemaining = this.endTime - currentTime; //this line probably creating crazy negative number bug
         this.setState({timeRemaining});
       if (this.state.timeRemaining > 0 && !this.state.isClicked) {
         requestAnimationFrame(this.frame)
@@ -34,7 +37,7 @@ export default class Interval extends React.Component {
         this.setState({timeRemaining: 0})
       }
 
-      if(this.state.timeRemaining === 0 && !this.state.isClicked) {
+      if(!this.state.timeRemaining && !this.state.isClicked) {
         let newTime = this.state.intervals.length ? this.state.intervals[0].duration : 0;
         window.setTimeout(() => {
           this.setState({timeRemaining: newTime * 1000, intervals: this.state.intervals.slice(1)});
@@ -46,6 +49,7 @@ export default class Interval extends React.Component {
       if (isNaN(this.state.timeRemaining) && this.state.timerStarted) {
         this.setState({timeRemaining: "DONE"})
       }
+      console.log(this.state.timeRemaining);
   }
 
   handlePause = () => {
@@ -60,10 +64,19 @@ export default class Interval extends React.Component {
     const done = 'DONE'
     return (
       <View style={styles.container}>
+        {
+          !this.state.begin ?
+          (<TouchableWithoutFeedback>
+            <Button
+              title="Start"
+              onPress={this.handleStart}
+            />
+          </TouchableWithoutFeedback>) : null
+        }
         <View>
           <Text style={{color, fontSize: 64}}>
-            { !this.state.intervals.length ?
-                done :
+            { !this.state.begin ?
+                null :
                 (this.state.timeRemaining / 1000).toFixed(2)
             }
           </Text>

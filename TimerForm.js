@@ -42,13 +42,7 @@ export default class TimerForm extends Component {
     };
   }
 
-  componentDidMount () {
-    const rootRef = db.ref().child('timerHolder');
-    const timerRef = rootRef.child('timerOne');
-    timerRef.on('value', (snapshot) => {
-      this.setState({time: snapshot.val()['0'].duration});
-    });
-  }
+  componentDidMount () {}
 
   handleChangeInterval = (interval) => {
     this.setState({interval});
@@ -78,7 +72,6 @@ export default class TimerForm extends Component {
     this.state.currentTimer ?
     this.setState({currentTimer: [...this.state.currentTimer, ...timerChunk]}) :
     this.setState({currentTimer: [...timerChunk]});
-    console.log(this.state);
     this.setState({
       intSet: [],
       repeats: null,
@@ -87,8 +80,12 @@ export default class TimerForm extends Component {
     })
   }
 
+  handleSubmit = () => {
+    const rootRef = db.ref('timer/').set(this.state.currentTimer);
+    this.setState({currentTimer: null})
+  }
+
   render() {
-    console.log(this.state.repeats)
     return (
       <ScrollView style={{marginTop: 50}}>
         <Form type={Interval} options={options} onChange={this.handleChangeInterval} value={this.state.interval} />
@@ -117,6 +114,9 @@ export default class TimerForm extends Component {
           this.state.currentTimer.map(interval => interval.name + ': ' + interval.duration + 's \n')
         }
         </Text>
+        <TouchableHighlight style={styles.button} onPress={this.handleSubmit} underlayColor='#99d9f4'>
+          <Text style={styles.buttonText}>Save Timer</Text>
+        </TouchableHighlight>
       </ScrollView>
     );
   }
