@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     width: 100,
-    backgroundColor: "#ff00ff",
-    borderColor: "#ff00ff",
+    backgroundColor: "#8b475d",
+    borderColor: "#db7093",
     borderWidth: 1,
     borderRadius: 4,
     marginBottom: 10,
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
   button2: {
     height: 50,
     width: 100,
-    backgroundColor: "#8A2BE2",
-    borderColor: "#8A2BE2",
+    backgroundColor: "#db7093",
+    borderColor: "#db7093",
     borderWidth: 1,
     borderRadius: 4,
     marginBottom: 10,

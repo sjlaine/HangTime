@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Button } from 'react-native';
 import { intervals } from './TimerOne';
 import db from './firebase';
 
@@ -13,8 +13,9 @@ export default class Interval extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
     let myTimer;
+
     return db.ref('timer/').once('value').then(function(snapshot) {
       return snapshot.val();
     })
@@ -22,12 +23,11 @@ export default class Interval extends React.Component {
   }
 
   handleStart = () => {
-    this.startFrame(this.state.intervals[0].duration * 1000);
     this.setState({begin: true})
+    this.startFrame(this.state.intervals[0].duration * 1000);
   }
 
   startFrame = (duration) => {
-    // console.log('DURATION', duration);
     this.duration = duration
     requestAnimationFrame(this.frame);
   }
@@ -35,7 +35,7 @@ export default class Interval extends React.Component {
   frame = (currentTime) => {
 
       if (!this.endTime && !this.state.isClicked) this.endTime = currentTime + this.duration;
-        const timeRemaining = this.endTime - currentTime; //this line probably creating crazy negative number bug
+        const timeRemaining = this.endTime - currentTime;
         this.setState({timeRemaining});
       if (this.state.timeRemaining > 0 && !this.state.isClicked) {
         requestAnimationFrame(this.frame)
@@ -75,18 +75,19 @@ export default class Interval extends React.Component {
   }
 
   render() {
-    const color = this.state.isClicked ? 'darkviolet' : 'magenta';
+    const color = this.state.isClicked ? '#8b475d' : '#db7093';
     const done = 'DONE'
     return (
       <View style={styles.container}>
         {
           !this.state.begin ?
-          (<TouchableWithoutFeedback>
-            <Button
-              title="Start"
+          (<TouchableHighlight
               onPress={this.handleStart}
-            />
-          </TouchableWithoutFeedback>) : null
+              style={styles.button}>
+            <Text style={styles.buttonText}>
+              Start
+            </Text>
+          </TouchableHighlight>) : null
         }
         <View>
           <Text style={{color, fontSize: 64, marginLeft: -10}}>
@@ -98,14 +99,13 @@ export default class Interval extends React.Component {
         </View>
         { !this.state.isClicked && this.state.intervals && this.state.intervals[0]
           && this.state.begin ?
-            (<Text style={{alignSelf: 'center'}}>{this.state.intervals[0].name}</Text>) : null
+            (<Text style={styles.textStyle}>{this.state.intervals[0].name}</Text>) : null
         }
-        <TouchableWithoutFeedback style={{alignSelf: 'center'}}>
-          <Button
-            title={this.state.isClicked ? "Start" : "Pause"}
-            onPress={this.handlePause}
-          />
-        </TouchableWithoutFeedback>
+        <TouchableHighlight onPress={this.handlePause} style={styles.button2}>
+            <Text style={styles.buttonText}>
+              {this.state.isClicked ? "Start" : "Pause"}
+            </Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -118,4 +118,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonText: {
+    fontSize: 14,
+    color: 'white',
+    alignSelf: 'center'
+  },
+  button: {
+    height: 50,
+    width: 100,
+    backgroundColor: "#8b475d",
+    borderColor: "#db7093",
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 10,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+  button2: {
+    height: 50,
+    width: 100,
+    backgroundColor: "#db7093",
+    borderColor: "#db7093",
+    borderWidth: 1,
+    borderRadius: 4,
+    marginBottom: 10,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+  textStyle: {
+    color: '#8b475d',
+    fontSize: 32,
+    alignSelf: 'center'
+  }
 });

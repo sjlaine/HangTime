@@ -11,21 +11,21 @@ export const Tabs = TabNavigator({
     screen: Home,
     navigationOptions: {
       tabBarLabel: 'Home',
-      tabBarIcon: <Icon name="home" size={32} color="magenta" />
+      tabBarIcon: <Icon name="home" size={32} color="#8b475d" />
     }
   },
   Interval: {
     screen: Interval,
     navigationOptions: {
       tabBarLabel: 'Interval',
-      tabBarIcon: <Icon name="timer" size={32} color="magenta" />
+      tabBarIcon: <Icon name="timer" size={32} color="#8b475d" />
     }
   },
   TimerForm: {
     screen: TimerForm,
     navigationOptions: {
       tabBarLabel: 'TimerForm',
-      tabBarIcon: <Icon name="book" size={32} color="magenta" />
+      tabBarIcon: <Icon name="book" size={32} color="#8b475d" />
     }
   }
 });

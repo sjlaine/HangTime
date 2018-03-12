@@ -5,11 +5,8 @@ export default class Home extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={{color: 'darkviolet', fontSize: 32, alignSelf: 'center'}}>
-          Sarah's
-        </Text>
-        <Text style={{color: 'darkviolet', fontSize: 32, alignSelf: 'center'}}>
-          Interval Timer!
+        <Text style={{color: '#8b475d', fontSize: 32, alignSelf: 'center'}}>
+          HangTime
         </Text>
       </View>
     );
