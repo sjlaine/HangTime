@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   button: {
-    height: 30,
+    height: 50,
+    width: 100,
     backgroundColor: "#ff00ff",
     borderColor: "#ff00ff",
     borderWidth: 1,
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "center",
     justifyContent: "center",
-    width: 100
   },
   button2: {
-    height: 30,
+    height: 50,
+    width: 100,
     backgroundColor: "#8A2BE2",
     borderColor: "#8A2BE2",
     borderWidth: 1,
@@ -155,7 +156,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: "center",
     justifyContent: "center",
-    width: 100
   }
 });
 
