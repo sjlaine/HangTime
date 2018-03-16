@@ -13,7 +13,7 @@ export default class Interval extends React.Component {
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = () => {
     let myTimer;
 
     return db.ref('timer/').once('value').then(function(snapshot) {
@@ -47,9 +47,10 @@ export default class Interval extends React.Component {
       if(!this.state.timeRemaining && !this.state.isClicked) {
         let newTime = this.state.intervals.length ? this.state.intervals[0].duration : 0;
         window.setTimeout(() => {
-          this.setState({timeRemaining: newTime * 1000, intervals: this.state.intervals.slice(1)});
+          this.setState({timeRemaining: newTime * 1000});
           this.endTime = null;
           this.startFrame(this.state.timeRemaining);
+          this.setState({intervals: this.state.intervals.slice(1)});
         }, 100);
       }
 
